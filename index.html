@@ -2282,6 +2282,44 @@ try{applyAdj();VER++}catch(e){}
 })();
 UPDLOG('22 nov 2026, ligas agregadas','Agregadas la Liga Argentina (octavos), la Liga BetPlay (cuadrangulares), la MLS (playoffs) y la Liga MX (hoy) con sus partidos de esta semana. Los octavos de Argentina de hoy y los de Colombia y MLS salen con cuotas de casas de apuestas o con el modelo de equipos de la página; la Liguilla de México y los segundos partidos de la MLS los agrego cuando salgan horarios y cuotas');
 
+/* Actualización lunes 23 nov 2026: resultados del domingo 22 y del lunes 23 (hasta Brentford, Levante, Monza y Gimnasia LP). Fuentes: datos oficiales de ligas, La Nación, ESPN, Heraldo de México, SDP Noticias. */
+(function(){
+ const rr=(h,a,d,sc,gt)=>{const m=S.find(x=>x.h===h&&x.a===a&&x.d===d&&!x.nop);if(!m)return;m.sc=sc;if(gt)m.gt=gt};
+ let d='2026-11-22';
+ rr('Hull City','Brighton',d,'2-0');
+ rr('Liverpool','Man United',d,'4-0');
+ rr('Barcelona','Villarreal',d,'3-2');
+ rr('Racing Santander','Real Sociedad',d,'3-2');
+ rr('Osasuna','Málaga',d,'1-0');
+ rr('Getafe','Atlético Madrid',d,'0-3');
+ rr('Juventus','Venezia',d,'4-0');
+ rr('Bologna','Udinese',d,'1-1');
+ rr('Sassuolo','Genoa',d,'0-2');
+ rr('Milan','Frosinone',d,'5-1');
+ rr('Atalanta','Inter',d,'4-4');
+ rr('Augsburg','Mainz',d,'3-1');
+ rr('Werder Bremen','Hamburgo',d,'4-0');
+ rr('Paris FC','Angers',d,'4-0');
+ rr('Lorient','Rennes',d,'1-1');
+ rr('Marseille','Le Mans',d,'2-3');
+ rr('Rosario Central','Gimnasia (M)',d,'3-1','Rosario Central pasa a cuartos');
+ rr('River','Lanús',d,'3-1','Almada (2) y Andrada para River; Carrera para Lanús. River pasa a cuartos');
+ rr('Instituto','Huracán',d,'2-1','Luna y Suárez para Instituto; Caicedo para Huracán. Instituto pasa a cuartos');
+ rr('Nashville','Cincinnati',d,'0-1');
+ rr('Chicago Fire','Charlotte FC',d,'1-2');
+ rr('Vancouver','Real Salt Lake',d,'2-0');
+ rr('Chivas','Cruz Azul',d,'1-0','Efraín Álvarez (21\'); Chivas termina líder del Apertura');
+ rr('Querétaro','Necaxa',d,'2-2','Ávila y Giménez para Querétaro; Rodríguez y Carranza (90\') para Necaxa');
+ d='2026-11-23';
+ rr('Brentford','Everton',d,'4-0');
+ rr('Levante','Elche',d,'1-1');
+ rr('Monza','Fiorentina',d,'3-0');
+ rr('Gimnasia LP',"Newell's",d,'2-2','Marcador a los 90\'. Gimnasia ganó 4-2 en el alargue y pasa a cuartos (Newell\'s con dos expulsados)');
+})();
+SNAP='2026-11-23';SNAPL='23 nov';
+UPDLOG('23 nov 2026','Actualizado el lunes 23 nov 2026 (Bogotá): resultados del domingo 22 (24 partidos) y del lunes 23 hasta ahora (Brentford–Everton, Levante–Elche, Monza–Fiorentina y Gimnasia LP–Newell\'s). Falta St. Louis–LAFC (MLS), hoy 8:00 p. m.');
+try{applyAdj();VER++}catch(e){}
+
 /* Partidos del 24 nov 2026 cargados desde capturas de cuotas 1X2 (Champions, Brasileirão, BetPlay y Championship). Horas en Bogotá. */
 (function(){
  N.CH='Championship';BASE.CH={g:2.6,c:10,k:4,t:25,tp:8.4};
@@ -2312,7 +2350,263 @@ UPDLOG('22 nov 2026, ligas agregadas','Agregadas la Liga Argentina (octavos), la
   if(ex){ex.gh=gh;ex.ga=ga;if(ex.gh0!==undefined){ex.gh0=gh;ex.ga0=ga}return}
   S.push({id:sid('x'+z+d.replace(/-/g,'')+h+a),seed:1,z:z,lg:N[z],d:d,hr:hr,h:h,a:a,gh:gh,ga:ga,c:B.c,k:B.k,t:B.t,tp:B.tp,lc:Math.floor(B.c)+.5,lk:Math.floor(B.k)+.5})});
 })();
-UPDLOG('23 nov 2026, partidos del 24 nov','Cargados 19 partidos del martes 24 nov con cuotas 1X2: 9 de Champions League, Chapecoense–Palmeiras (Brasileirão) y 9 del Championship inglés. Millonarios–Bucaramanga y América–Cali ya estaban y ahora usan estas cuotas. Los goles esperados salen de las cuotas sin margen de la casa; córners, tarjetas y tiros son promedios de la liga');
+UPDLOG('23 nov 2026, partidos del 24 nov','Cargados 17 partidos nuevos del martes 24 nov con cuotas 1X2: 9 de Champions League, Chapecoense–Palmeiras (Brasileirão) y 7 del Championship inglés. Millonarios–Bucaramanga y América–Cali ya estaban y ahora usan estas cuotas. Los goles esperados salen de las cuotas sin margen de la casa; córners, tarjetas y tiros son promedios de la liga');
+try{applyAdj();VER++}catch(e){}
+
+/* NBA de la semana del 23 al 29 nov 2026. Calendario oficial de la NBA (versión del 13 ago 2026, sujeto a cambios). Horas en Bogotá (= hora del Este en noviembre).
+   Lunes 23: probabilidades del proveedor. Resto: estimadas con los ratings de puntos de los equipos (marca 'e'), así que son menos fiables. El jueves 26 no hay juegos. */
+(function(){
+ const T={ATL:'Hawks',BOS:'Celtics',BKN:'Nets',CHA:'Hornets',CHI:'Bulls',CLE:'Cavaliers',DAL:'Mavericks',DEN:'Nuggets',DET:'Pistons',GSW:'Warriors',HOU:'Rockets',IND:'Pacers',LAC:'Clippers',LAL:'Lakers',MEM:'Grizzlies',MIA:'Heat',MIL:'Bucks',MIN:'Timberwolves',NOP:'Pelicans',NYK:'Knicks',OKC:'Thunder',ORL:'Magic',PHI:'76ers',PHX:'Suns',POR:'Trail Blazers',SAC:'Kings',SAS:'Spurs',TOR:'Raptors',UTA:'Jazz',WAS:'Wizards'};
+ // [fecha, hora, visitante, local, prob. local % del proveedor (o null)]
+ const G=[
+ ['2026-11-23','19:00','MEM','CHA',44],['2026-11-23','19:00','POR','PHI',49.9],['2026-11-23','19:30','MIL','TOR',79.8],['2026-11-23','19:30','OKC','IND',37.7],['2026-11-23','19:30','BKN','MIN',81.7],
+ ['2026-11-23','20:00','CLE','CHI',24.6],['2026-11-23','20:00','PHX','NOP',42.2],['2026-11-23','20:30','LAC','HOU',84.6],['2026-11-23','22:00','UTA','LAL',86.8],['2026-11-23','22:00','SAS','SAC',16.3],
+ ['2026-11-24','19:00','DET','ORL'],['2026-11-24','20:00','BOS','WAS'],['2026-11-24','22:00','DAL','DEN'],
+ ['2026-11-25','17:00','MIA','PHI'],['2026-11-25','19:00','CHI','CHA'],['2026-11-25','19:30','CLE','NYK'],['2026-11-25','19:30','MIN','OKC'],['2026-11-25','20:00','LAC','MEM'],['2026-11-25','20:00','BKN','MIL'],['2026-11-25','20:30','PHX','HOU'],['2026-11-25','22:00','SAC','GSW'],['2026-11-25','22:00','SAS','POR'],
+ ['2026-11-27','19:00','MIA','NYK'],['2026-11-27','19:30','MIL','DET'],['2026-11-27','19:30','PHI','IND'],['2026-11-27','19:30','BKN','TOR'],['2026-11-27','20:00','ATL','BOS'],['2026-11-27','20:30','MEM','MIN'],['2026-11-27','21:00','DAL','PHX'],['2026-11-27','21:30','LAL','SAS'],['2026-11-27','21:30','DEN','UTA'],['2026-11-27','21:30','NOP','LAC'],['2026-11-27','21:30','GSW','POR'],
+ ['2026-11-28','17:00','ORL','WAS'],['2026-11-28','18:00','BKN','CHA'],['2026-11-28','20:00','IND','CHI'],['2026-11-28','20:00','OKC','MIL'],['2026-11-28','20:30','PHI','HOU'],
+ ['2026-11-29','16:00','LAL','MEM'],['2026-11-29','16:00','BOS','SAS'],['2026-11-29','17:00','PHX','UTA'],['2026-11-29','18:00','MIA','CLE'],['2026-11-29','18:00','ORL','DET'],['2026-11-29','18:00','ATL','NYK'],['2026-11-29','18:00','DEN','TOR'],['2026-11-29','18:00','NOP','POR'],['2026-11-29','20:30','LAC','GSW'],['2026-11-29','21:00','MIN','SAC']];
+ const ks=Object.keys(NBTD),L=ks.reduce((t,k)=>t+NBTD[k][0],0)/ks.length;
+ const net=t=>{const r=NBTD[t],w=r[2]/(r[2]+8);return (r[0]-L)*w-(r[1]-L)*w};
+ const est=(h,a)=>{const mg=net(h)-net(a)+2.5;return Math.max(6,Math.min(94,Math.round(nbtPhi(mg/12)*1000)/10))};
+ G.forEach(([d,hr,a,h,pp])=>{const av=T[a],hm=T[h];if(US.some(x=>x[0]==='NBA'&&x[1]===d&&x[3]===av&&x[4]===hm))return;
+  if(pp!=null)US.push(['NBA',d,hr,av,hm,pp]);else US.push(['NBA',d,hr,av,hm,est(hm,av),null,null,null,'e'])});
+})();
+UPDLOG('23 nov 2026, NBA de la semana','Cargados los 48 juegos de la NBA del lunes 23 al domingo 29 (el jueves 26 no hay). Los de hoy usan la probabilidad del proveedor; los demás son estimaciones con los ratings de puntos de cada equipo y son menos fiables');
+
+/* Brasileirão: jornada 36 (resultados del 21 y 22 nov y partidos pendientes) y jornada 37 completa (24 al 29 nov). Calendario oficial de la CBF (tabla detallada del 6 nov 2026). Horas en Bogotá (Brasilia menos 2 h). */
+(function(){
+ const z='R',B=BASE[z];
+ const L=[
+ ['2026-11-21','14:30','Palmeiras','Flamengo','1-1','Flamengo se proclama campeón con dos jornadas de anticipación'],
+ ['2026-11-21','15:30','Bahia','Coritiba','0-1'],
+ ['2026-11-21','19:00','Chapecoense','Cruzeiro','1-2','Sexta victoria seguida de Cruzeiro'],
+ ['2026-11-22','14:00','Athletico-PR','Remo','4-2','Remo queda descendido'],
+ ['2026-11-22','16:30','Fluminense','Mirassol','1-0','Gol de Riquelme Felipe en el 90+1'],
+ ['2026-11-22','18:30','Bragantino','Vasco','1-0'],
+ ['2026-11-23','17:30','Internacional','Vitória'],['2026-11-23','18:00','Botafogo','São Paulo'],['2026-11-23','19:00','Santos','Grêmio'],
+ ['2026-11-25','18:00','Atlético-MG','Corinthians'],
+ ['2026-11-26','18:00','São Paulo','Remo'],['2026-11-27','18:00','Fluminense','Cruzeiro'],['2026-11-28','19:00','Botafogo','Bahia'],
+ ['2026-11-29','14:00','Coritiba','Flamengo'],['2026-11-29','14:00','Vitória','Santos'],['2026-11-29','16:30','Corinthians','Grêmio'],['2026-11-29','16:30','Mirassol','Athletico-PR'],['2026-11-29','16:30','Internacional','Bragantino'],['2026-11-29','17:30','Atlético-MG','Vasco']];
+ L.forEach(([d,hr,h,a,sc,gt])=>{
+  let m=S.find(x=>x.d===d&&x.h===h&&x.a===a&&!x.nop);
+  if(!m){const l=tlam(z,h,a);m={id:sid('x'+z+d.replace(/-/g,'')+h+a),seed:1,z:z,lg:N[z],d:d,hr:hr,h:h,a:a,gh:l[0],ga:l[1]};
+   if(B.c){m.c=B.c;m.k=B.k;m.t=B.t;m.tp=B.tp;m.lc=Math.floor(B.c)+.5;m.lk=Math.floor(B.k)+.5}S.push(m)}
+  if(sc){m.sc=sc;if(gt)m.gt=gt}});
+})();
+UPDLOG('23 nov 2026, Brasileirão','Brasileirão al día: resultados de la jornada 36 (Palmeiras 1-1 Flamengo, Flamengo campeón; Remo descendido) y cargados los partidos pendientes de la 36 y los 10 de la jornada 37 (24 al 29 nov). Los goles esperados salen del nivel de cada equipo, sin cuotas de casas de apuestas');
+try{applyAdj();VER++}catch(e){}
+
+/* Actualización martes 24 nov 2026, 9:00 p. m. (Bogotá): resultados del lunes 23 y del martes 24, y partidos del miércoles 25 (Champions y Championship). */
+(function(){
+ const rr=(h,a,d,sc,gt)=>{const m=S.find(x=>x.h===h&&x.a===a&&x.d===d&&!x.nop);if(!m)return;m.sc=sc;if(gt)m.gt=gt};
+ let d='2026-11-23';
+ rr('St. Louis City','LAFC',d,'3-2');
+ rr('Internacional','Vitória',d,'2-5');rr('Botafogo','São Paulo',d,'1-1');rr('Santos','Grêmio',d,'0-2');
+ d='2026-11-24';
+ [['Bodø/Glimt','LASK Linz','1-0'],['Galatasaray','Aston Villa','1-0'],['Arsenal','Dortmund','1-1'],['Como','AEK Atenas','1-0'],['Feyenoord','Porto','0-1'],['Man City','Napoli','2-2'],['Leipzig','Lens','3-1'],['Real Madrid','PSV','5-1'],['Slovan Bratislava','Betis','0-2'],
+  ['Sheffield United','Southampton','1-1'],['Portsmouth','West Ham','1-0'],['Bristol City','Wrexham','1-1'],['Norwich','QPR','1-1'],['Charlton','Lincoln City','4-0'],['Middlesbrough','Swansea','2-1'],['Cardiff','Preston','0-4'],
+  ['Chapecoense','Palmeiras','3-0'],['Millonarios','Bucaramanga','4-1']].forEach(([h,a,sc])=>rr(h,a,d,sc));
+ /* NBA: marcadores del lunes 23 (visitante-local) y probabilidades del proveedor para los juegos que ya la tienen */
+ const nb=(dd,a,h,fin,ph)=>{const g=US.find(x=>x[0]==='NBA'&&x[1]===dd&&x[3]===a&&x[4]===h);if(!g)return;if(fin)g[6]=fin;if(ph!=null){g[5]=ph;g[9]=undefined}};
+ d='2026-11-23';
+ nb(d,'Grizzlies','Hornets',[117,111]);nb(d,'Trail Blazers','76ers',[128,111]);nb(d,'Bucks','Raptors',[116,111]);nb(d,'Thunder','Pacers',[120,125]);nb(d,'Nets','Timberwolves',[116,142]);
+ nb(d,'Cavaliers','Bulls',[108,122]);nb(d,'Suns','Pelicans',[123,119]);nb(d,'Clippers','Rockets',[104,116]);nb(d,'Jazz','Lakers',[94,109]);nb(d,'Spurs','Kings',[123,107]);
+ nb('2026-11-24','Mavericks','Nuggets',null,74.2);
+ nb('2026-11-25','Heat','76ers',null,50.7);nb('2026-11-25','Cavaliers','Knicks',null,59);nb('2026-11-25','Timberwolves','Thunder',null,53.3);nb('2026-11-25','Suns','Rockets',null,78.2);nb('2026-11-25','Spurs','Trail Blazers',null,41.8);
+ /* Miércoles 25: Champions (probabilidades del proveedor: local / empate / visitante) y Championship (sin cuotas: ventaja de local neutra) */
+ const mk=(z,dd,hr,h,a,gh,ga)=>{if(S.some(x=>x.d===dd&&x.h===h&&x.a===a))return;const B=BASE[z];
+  const m={id:sid('x'+z+dd.replace(/-/g,'')+h+a),seed:1,z:z,lg:N[z],d:dd,hr:hr,h:h,a:a,gh:gh,ga:ga};
+  if(B.c){m.c=B.c;m.k=B.k;m.t=B.t;m.tp=B.tp;m.lc=Math.floor(B.c)+.5;m.lk=Math.floor(B.k)+.5}S.push(m)};
+ d='2026-11-25';
+ [['12:45','Sabah','Barcelona',3.5,6.1,90.4],['12:45','Slavia Praga','Villarreal',30.7,24.5,44.8],['15:00','Atlético Madrid','Viking',87.5,8.3,4.2],['15:00','Club Brugge','Liverpool',21.5,19.8,58.7],
+  ['15:00','Inter','Stuttgart',68.2,16.4,15.4],['15:00','Shakhtar','Fenerbahçe',33,27.2,39.8],['15:00','Lille','Bayern',19.3,22.8,57.9],['15:00','PSG','Roma',66.4,18,15.6],['15:00','Sporting CP','Man United',37.6,25.6,36.8]
+ ].forEach(([hr,h,a,pw,pd,pa])=>{const g=BASE.C.g,x=lam(g,pw/(pw+pd+pa));mk('C',d,hr,h,a,x,g-x)});
+ [['14:45','Bolton','West Brom'],['14:45','Burnley','Birmingham'],['14:45','Watford','Blackburn'],['15:00','Stoke','Millwall']].forEach(([hr,h,a])=>{const g=BASE.CH.g;mk('CH',d,hr,h,a,g*.56,g*.44)});
+})();
+SNAP='2026-11-24';SNAPL='24 nov';
+UPDLOG('24 nov 2026, 9:00 p. m.','Al día hasta el martes 24 nov (9:00 p. m. Bogotá): resultados de Champions (9), Championship (7), Brasileirão (4), Millonarios–Bucaramanga, St. Louis–LAFC y los 10 juegos de la NBA del lunes. Cargados los 9 de Champions y 4 del Championship del miércoles 25. Las probabilidades de Champions vienen del proveedor; las del Championship son neutras (ventaja de local, sin cuotas). Pendientes hoy: América–Cali, San José–Houston y NBA')
+;try{applyAdj();VER++}catch(e){}
+
+/* Cuotas 1X2 del miércoles 25 nov (captura de pantalla de la casa, 10:27 p. m. del martes 24): recalculan los goles esperados de cada partido y llenan las cuotas del app. */
+(function(){
+ const d='2026-11-25';
+ [['C','Sabah','Barcelona',24,11,1.09],['C','Slavia Praga','Villarreal',3.05,3.9,2.15],['C','Atlético Madrid','Viking',1.12,9.25,19.5],['C','Club Brugge','Liverpool',4.3,4.6,1.67],
+  ['C','Inter','Stuttgart',1.44,5.4,6],['C','Shakhtar','Fenerbahçe',3,3.6,2.27],['C','Lille','Bayern',4.7,4.05,1.7],['C','PSG','Roma',1.47,5,6],['C','Sporting CP','Man United',2.55,3.65,2.6],
+  ['O','Nacional','Medellín',1.8,3.75,4.4]].forEach(([z,h,a,o1,ox,o2])=>{
+  const m=S.find(x=>x.d===d&&x.h===h&&x.a===a&&!x.nop);if(!m)return;
+  const B=BASE[z],i=1/o1+1/ox+1/o2,x=lam(B.g,(1/o1)/i);
+  m.gh=x;m.ga=B.g-x;if(m.gh0!==undefined){m.gh0=m.gh;m.ga0=m.ga}
+  [['Gana '+h,o1],['Empate',ox],['Gana '+a,o2]].forEach(([t,q])=>{const k=m.id+'|'+t;DEFODD[k]=q;if(!ODD[k])ODD[k]=q})});
+})();
+UPDLOG('24 nov 2026, 10:30 p. m.','Cuotas 1X2 puestas en los 9 partidos de Champions del miércoles 25 y en Atlético Nacional–Independiente Medellín. Los goles esperados de esos partidos ahora salen de las cuotas sin margen de la casa, en vez de las probabilidades del proveedor');
+try{applyAdj();VER++}catch(e){}
+
+/* Miércoles 25 nov, 5:40 a. m. (Bogotá): resultados de anoche y mercados completos de PSG–Roma (captura de la casa, 5:38 a. m.). */
+(function(){
+ const rr=(h,a,d,sc,gt)=>{const m=S.find(x=>x.h===h&&x.a===a&&x.d===d&&!x.nop);if(!m)return;m.sc=sc;if(gt)m.gt=gt};
+ rr('América','Cali','2026-11-24','2-1');
+ rr('San Jose','Houston Dynamo','2026-11-24','2-1');
+ const nb=(dd,a,h,fin,ph)=>{const g=US.find(x=>x[0]==='NBA'&&x[1]===dd&&x[3]===a&&x[4]===h);if(!g)return;if(fin)g[6]=fin;if(ph!=null){g[5]=ph;g[9]=undefined}};
+ nb('2026-11-24','Pistons','Magic',[104,86]);nb('2026-11-24','Celtics','Wizards',[131,116]);nb('2026-11-24','Mavericks','Nuggets',[120,101]);
+ /* probabilidades del proveedor del miércoles 25 (local %) */
+ const e='2026-11-25';
+ nb(e,'Heat','76ers',null,50.8);nb(e,'Bulls','Hornets',null,58.5);nb(e,'Cavaliers','Knicks',null,58);nb(e,'Timberwolves','Thunder',null,53.3);nb(e,'Clippers','Grizzlies',null,69.3);
+ nb(e,'Nets','Bucks',null,50.2);nb(e,'Suns','Rockets',null,77.8);nb(e,'Kings','Warriors',null,67.1);nb(e,'Spurs','Trail Blazers',null,42.4);
+ /* PSG–Roma: goles esperados, córners y cuotas sacados de las cuotas de la casa */
+ const m=S.find(x=>x.d===e&&x.h==='PSG'&&x.a==='Roma'&&!x.nop);
+ if(m){
+  const dv=(a,b)=>(1/a)/(1/a+1/b);
+  const fit=(lines,hi)=>{let best=1,bv=1e9;for(let t=lo0(lines);t<=hi;t+=.01){let er=0;lines.forEach(([l,o,u])=>{er+=(over(t,l)-dv(o,u))**2});if(er<bv){bv=er;best=t}}return best};
+  const lo0=l=>l[0][0]>5?4:1.5;
+  const T=fit([[2.5,1.38,3.05],[3.5,1.91,1.90],[4.5,3.00,1.40]],6);
+  const C=fit([[7.5,1.38,2.90],[8.5,1.67,2.10],[9.5,2.12,1.67]],14);
+  const s1=1/1.52+1/4.5+1/5.9,x=lam(T,(1/1.52)/s1);
+  const K=kLg(m.lg);/* el app ya multiplica los goles por el factor de la liga (kLg); se divide para que el total final sea el del mercado */
+  m.gh=x/K;m.ga=(T-x)/K;if(m.gh0!==undefined){m.gh0=m.gh;m.ga0=m.ga}
+  m.c=C;m.lc=Math.floor(C)+.5;
+  [['Gana PSG',1.52],['Empate',4.5],['Gana Roma',5.9],['1X (PSG o empate)',1.15],['X2 (empate o Roma)',2.65],['12 (PSG o Roma)',1.19],
+   ['Más de 2.5 goles',1.38],['Menos de 2.5 goles',3.05],['Más de 3.5 goles',1.91],['Menos de 3.5 goles',1.90],['Más de 4.5 goles',3.00],['Menos de 4.5 goles',1.40],
+   ['Ambos marcan: Sí',1.45],['Ambos marcan: No',2.60],
+   ['Más de 7.5 córners',1.38],['Menos de 7.5 córners',2.90],['Más de 8.5 córners',1.67],['Menos de 8.5 córners',2.10],['Más de 9.5 córners',2.12],['Menos de 9.5 córners',1.67]
+  ].forEach(([t,q])=>{const k=m.id+'|'+t;DEFODD[k]=q;ODD[k]=q});
+ }
+})();
+UPDLOG('25 nov 2026, 5:40 a. m.','Resultados de anoche: América 2-1 Cali, San José 2-1 Houston y NBA (Pistons 104-86 Magic, Celtics 131-116 Wizards, Mavericks 120-101 Nuggets). Probabilidades del proveedor actualizadas en los 9 juegos de la NBA de hoy. PSG–Roma: cuotas de la casa (1X2, doble oportunidad, goles, ambos marcan y córners) y goles y córners esperados recalculados con ellas');
+try{applyAdj();VER++}catch(e){}
+
+/* Lille–Bayern (captura de la casa, 5:39 a. m. del miércoles 25): 1X2, doble oportunidad, goles, ambos marcan, córners y tarjetas. También se corrige la etiqueta de "12" en PSG–Roma. */
+(function(){
+ const e='2026-11-25',dv=(a,b)=>(1/a)/(1/a+1/b);
+ const fit=(L,lo,hi)=>{let best=lo,bv=1e9;for(let t=lo;t<=hi;t+=.01){let er=0;L.forEach(([l,o,u])=>{er+=(over(t,l)-dv(o,u))**2});if(er<bv){bv=er;best=t}}return best};
+ const pm_=S.find(x=>x.d===e&&x.h==='PSG'&&x.a==='Roma'&&!x.nop);
+ if(pm_){delete ODD[pm_.id+'|12 (PSG o Roma)'];delete DEFODD[pm_.id+'|12 (PSG o Roma)'];ODD[pm_.id+'|12 (sin empate)']=1.19;DEFODD[pm_.id+'|12 (sin empate)']=1.19}
+ const m=S.find(x=>x.d===e&&x.h==='Lille'&&x.a==='Bayern'&&!x.nop);
+ if(m){
+  const T=fit([[1.5,1.26,3.95],[2.5,1.78,2.05],[3.5,2.87,1.42]],1.5,6);
+  const C=fit([[8.5,1.52,2.45],[9.5,1.87,1.87],[10.5,2.42,1.52]],4,16);
+  const Kt=fit([[2.5,1.40,2.80],[3.5,1.87,1.87],[4.5,2.67,1.44]],1,8);
+  const s1=1/5.3+1/4.05+1/1.62,x=lam(T,(1/5.3)/s1),K=kLg(m.lg);
+  m.gh=x/K;m.ga=(T-x)/K;if(m.gh0!==undefined){m.gh0=m.gh;m.ga0=m.ga}
+  m.c=C;m.lc=Math.floor(C)+.5;m.k=Kt;m.lk=Math.floor(Kt)+.5;
+  [['Gana Lille',5.3],['Empate',4.05],['Gana Bayern',1.62],['1X (Lille o empate)',2.32],['X2 (empate o Bayern)',1.18],['12 (sin empate)',1.23],
+   ['Más de 1.5 goles',1.26],['Menos de 1.5 goles',3.95],['Más de 2.5 goles',1.78],['Menos de 2.5 goles',2.05],['Más de 3.5 goles',2.87],['Menos de 3.5 goles',1.42],
+   ['Ambos marcan: Sí',1.78],['Ambos marcan: No',1.98],
+   ['Más de 8.5 córners',1.52],['Menos de 8.5 córners',2.45],['Más de 9.5 córners',1.87],['Menos de 9.5 córners',1.87],['Más de 10.5 córners',2.42],['Menos de 10.5 córners',1.52],
+   ['Más de 2.5 tarjetas',1.40],['Menos de 2.5 tarjetas',2.80],['Más de 3.5 tarjetas',1.87],['Menos de 3.5 tarjetas',1.87],['Más de 4.5 tarjetas',2.67],['Menos de 4.5 tarjetas',1.44]
+  ].forEach(([t,q])=>{const k=m.id+'|'+t;DEFODD[k]=q;ODD[k]=q});
+ }
+})();
+UPDLOG('25 nov 2026, 5:45 a. m.','Lille–Bayern: cuotas de la casa (1X2, doble oportunidad, goles, ambos marcan, córners y tarjetas) y goles, córners y tarjetas esperados recalculados con ellas. Corregida la cuota de "12 (sin empate)" en PSG–Roma');
+try{applyAdj();VER++}catch(e){}
+
+/* Sabah–Barcelona y Club Brugge–Liverpool (capturas de la casa, 5:51 a. m. del miércoles 25): 1X2, doble oportunidad, goles, ambos marcan, córners y tarjetas. */
+(function(){
+ const e='2026-11-25',dv=(a,b)=>(1/a)/(1/a+1/b);
+ const fit=(L,lo,hi)=>{let best=lo,bv=1e9;for(let t=lo;t<=hi;t+=.01){let er=0;L.forEach(([l,o,u])=>{er+=(over(t,l)-dv(o,u))**2});if(er<bv){bv=er;best=t}}return best};
+ const go=(h,a,x12,dc,G,B,Co,Ta)=>{
+  const m=S.find(x=>x.d===e&&x.h===h&&x.a===a&&!x.nop);if(!m)return;
+  const T=fit(G,1.5,8),C=fit(Co,4,16),Kt=fit(Ta,1,8),s1=1/x12[0]+1/x12[1]+1/x12[2],x=lam(T,(1/x12[0])/s1),K=kLg(m.lg);
+  m.gh=x/K;m.ga=(T-x)/K;if(m.gh0!==undefined){m.gh0=m.gh;m.ga0=m.ga}
+  m.c=C;m.lc=Math.floor(C)+.5;m.k=Kt;m.lk=Math.floor(Kt)+.5;
+  const set=(t,q)=>{const k=m.id+'|'+t;DEFODD[k]=q;ODD[k]=q};
+  set('Gana '+h,x12[0]);set('Empate',x12[1]);set('Gana '+a,x12[2]);
+  set('1X ('+h+' o empate)',dc[0]);set('X2 (empate o '+a+')',dc[1]);set('12 (sin empate)',dc[2]);
+  set('Ambos marcan: Sí',B[0]);set('Ambos marcan: No',B[1]);
+  G.forEach(([l,o,u])=>{if(l<=4.5){set('Más de '+l+' goles',o);set('Menos de '+l+' goles',u)}});
+  Co.forEach(([l,o,u])=>{set('Más de '+l+' córners',o);set('Menos de '+l+' córners',u)});
+  Ta.forEach(([l,o,u])=>{set('Más de '+l+' tarjetas',o);set('Menos de '+l+' tarjetas',u)});
+ };
+ go('Sabah','Barcelona',[21,10.5,1.10],[8.25,1.02,1.05],[[3.5,1.36,3.15],[4.5,1.80,2.02],[5.5,2.60,1.50]],[1.70,2.07],[[8.5,1.55,2.35],[9.5,1.91,1.82],[10.5,2.55,1.47]],[[2.5,1.52,2.42],[3.5,2.15,1.65],[4.5,3.30,1.30]]);
+ go('Club Brugge','Liverpool',[4.35,4.70,1.65],[2.30,1.24,1.19],[[2.5,1.33,3.35],[3.5,1.82,2.00],[4.5,2.77,1.45]],[1.39,2.85],[[8.5,1.45,2.65],[9.5,1.75,2.02],[10.5,2.25,1.60]],[[2.5,1.34,3.10],[3.5,1.75,2.00],[4.5,2.47,1.50]]);
+})();
+UPDLOG('25 nov 2026, 6:00 a. m.','Sabah–Barcelona y Brujas–Liverpool: cuotas de la casa (1X2, doble oportunidad, goles, ambos marcan, córners y tarjetas) y goles, córners y tarjetas esperados recalculados con ellas');
+try{applyAdj();VER++}catch(e){}
+
+/* Inter–Stuttgart, Atlético–Viking, Sporting–Man United y Slavia–Villarreal (capturas de la casa, 5:55 a 5:57 a. m. del miércoles 25). El 1X2 es el de las capturas anteriores. */
+(function(){
+ const e='2026-11-25',dv=(a,b)=>(1/a)/(1/a+1/b);
+ const fit=(L,lo,hi)=>{let best=lo,bv=1e9;for(let t=lo;t<=hi;t+=.01){let er=0;L.forEach(([l,o,u])=>{er+=(over(t,l)-dv(o,u))**2});if(er<bv){bv=er;best=t}}return best};
+ const go=(h,a,x12,dc,G,B,Co,Ta)=>{
+  const m=S.find(x=>x.d===e&&x.h===h&&x.a===a&&!x.nop);if(!m)return;
+  const T=fit(G,1.5,8),C=fit(Co,4,16),Kt=fit(Ta,1,8),s1=1/x12[0]+1/x12[1]+1/x12[2],x=lam(T,(1/x12[0])/s1),K=kLg(m.lg);
+  m.gh=x/K;m.ga=(T-x)/K;if(m.gh0!==undefined){m.gh0=m.gh;m.ga0=m.ga}
+  m.c=C;m.lc=Math.floor(C)+.5;m.k=Kt;m.lk=Math.floor(Kt)+.5;
+  const set=(t,q)=>{const k=m.id+'|'+t;DEFODD[k]=q;ODD[k]=q};
+  set('Gana '+h,x12[0]);set('Empate',x12[1]);set('Gana '+a,x12[2]);
+  set('1X ('+h+' o empate)',dc[0]);set('X2 (empate o '+a+')',dc[1]);set('12 (sin empate)',dc[2]);
+  set('Ambos marcan: Sí',B[0]);set('Ambos marcan: No',B[1]);
+  G.forEach(([l,o,u])=>{if(l<=4.5){set('Más de '+l+' goles',o);set('Menos de '+l+' goles',u)}});
+  Co.forEach(([l,o,u])=>{set('Más de '+l+' córners',o);set('Menos de '+l+' córners',u)});
+  Ta.forEach(([l,o,u])=>{set('Más de '+l+' tarjetas',o);set('Menos de '+l+' tarjetas',u)});
+ };
+ go('Inter','Stuttgart',[1.44,5.40,6.00],[1.14,2.90,1.16],[[2.5,1.30,3.60],[3.5,1.72,2.12],[4.5,2.60,1.50]],[1.44,2.67],[[8.5,1.52,2.45],[9.5,1.87,1.87],[10.5,2.42,1.52]],[[2.5,1.47,2.55],[3.5,2.05,1.72],[4.5,3.05,1.35]]);
+ go('Atlético Madrid','Viking',[1.12,9.25,19.50],[1.03,6.40,1.07],[[2.5,1.28,3.70],[3.5,1.70,2.18],[4.5,2.50,1.55]],[1.93,1.80],[[9.5,1.60,2.25],[10.5,2.00,1.75],[11.5,2.57,1.47]],[[1.5,1.23,3.85],[2.5,1.62,2.20],[3.5,2.37,1.55]]);
+ go('Sporting CP','Man United',[2.55,3.65,2.60],[1.55,1.52,1.27],[[2.5,1.55,2.50],[3.5,2.30,1.62],[4.5,3.85,1.26]],[1.45,2.62],[[8.5,1.52,2.42],[9.5,1.87,1.87],[10.5,2.45,1.52]],[[3.5,1.52,2.45],[4.5,2.02,1.75],[5.5,2.85,1.39]]);
+ go('Slavia Praga','Villarreal',[3.05,3.90,2.15],[1.70,1.40,1.27],[[1.5,1.22,4.35],[2.5,1.65,2.25],[3.5,2.60,1.50]],[1.55,2.35],[[8.5,1.44,2.65],[9.5,1.75,2.02],[10.5,2.25,1.60]],[[3.5,1.55,2.35],[4.5,2.07,1.70],[5.5,2.95,1.36]]);
+})();
+UPDLOG('25 nov 2026, 6:10 a. m.','Inter–Stuttgart, Atlético–Viking, Sporting–Man United y Slavia–Villarreal: cuotas de la casa (doble oportunidad, goles, ambos marcan, córners y tarjetas; el 1X2 es el de las capturas anteriores) y goles, córners y tarjetas esperados recalculados con ellas');
+try{applyAdj();VER++}catch(e){}
+
+/* Shakhtar–Fenerbahçe y Atlético Nacional–Independiente Medellín (capturas de la casa, 5:59 y 6:00 a. m. del miércoles 25). Shakhtar–Fenerbahçe usa el 1X2 de las capturas anteriores; Nacional–Medellín trae su 1X2 nuevo. */
+(function(){
+ const e='2026-11-25',dv=(a,b)=>(1/a)/(1/a+1/b);
+ const fit=(L,lo,hi)=>{let best=lo,bv=1e9;for(let t=lo;t<=hi;t+=.01){let er=0;L.forEach(([l,o,u])=>{er+=(over(t,l)-dv(o,u))**2});if(er<bv){bv=er;best=t}}return best};
+ const go=(h,a,x12,dc,G,B,Co,Ta)=>{
+  const m=S.find(x=>x.d===e&&x.h===h&&x.a===a&&!x.nop);if(!m)return;
+  const T=fit(G,1.5,8),C=fit(Co,4,16),Kt=fit(Ta,1,12),s1=1/x12[0]+1/x12[1]+1/x12[2],x=lam(T,(1/x12[0])/s1),K=kLg(m.lg);
+  m.gh=x/K;m.ga=(T-x)/K;if(m.gh0!==undefined){m.gh0=m.gh;m.ga0=m.ga}
+  m.c=C;m.lc=Math.floor(C)+.5;m.k=Kt;m.lk=Math.floor(Kt)+.5;
+  const set=(t,q)=>{const k=m.id+'|'+t;DEFODD[k]=q;ODD[k]=q};
+  set('Gana '+h,x12[0]);set('Empate',x12[1]);set('Gana '+a,x12[2]);
+  set('1X ('+h+' o empate)',dc[0]);set('X2 (empate o '+a+')',dc[1]);set('12 (sin empate)',dc[2]);
+  set('Ambos marcan: Sí',B[0]);set('Ambos marcan: No',B[1]);
+  G.forEach(([l,o,u])=>{if(l<=4.5){set('Más de '+l+' goles',o);set('Menos de '+l+' goles',u)}});
+  Co.forEach(([l,o,u])=>{set('Más de '+l+' córners',o);set('Menos de '+l+' córners',u)});
+  Ta.forEach(([l,o,u])=>{set('Más de '+l+' tarjetas',o);set('Menos de '+l+' tarjetas',u)});
+ };
+ go('Shakhtar','Fenerbahçe',[3.00,3.60,2.27],[1.53,1.50,1.30],[[1.5,1.25,3.95],[2.5,1.75,2.07],[3.5,2.82,1.44]],[1.60,2.27],[[8.5,1.52,2.42],[9.5,1.87,1.87],[10.5,2.45,1.50]],[[3.5,1.57,2.30],[4.5,2.12,1.67],[5.5,3.05,1.35]]);
+ go('Nacional','Medellín',[1.87,3.50,4.40],[1.24,1.98,1.29],[[1.5,1.44,2.67],[2.5,2.27,1.60],[3.5,4.05,1.21]],[2.07,1.67],[[8.5,1.55,2.35],[9.5,1.93,1.82],[10.5,2.50,1.50]],[[6.5,1.85,1.90]]);
+})();
+UPDLOG('25 nov 2026, 6:20 a. m.','Shakhtar–Fenerbahçe y Atlético Nacional–Independiente Medellín: cuotas de la casa (doble oportunidad, goles, ambos marcan, córners y tarjetas) y goles, córners y tarjetas esperados recalculados con ellas. Nacional–Medellín usa su 1X2 nuevo (1.87 / 3.50 / 4.40). Con esto los 9 partidos de Champions de hoy tienen mercados completos');
+try{applyAdj();VER++}catch(e){}
+
+/* Boca–Independiente Rivadavia (mercados completos) y 1X2 de Atlético-MG–Corinthians, Burnley–Birmingham, Bolton–West Brom y Watford–Blackburn (capturas de la casa, 6:02 y 6:03 a. m. del miércoles 25). */
+(function(){
+ const e='2026-11-25',dv=(a,b)=>(1/a)/(1/a+1/b);
+ const fit=(L,lo,hi)=>{let best=lo,bv=1e9;for(let t=lo;t<=hi;t+=.01){let er=0;L.forEach(([l,o,u])=>{er+=(over(t,l)-dv(o,u))**2});if(er<bv){bv=er;best=t}}return best};
+ const set=(m,t,q)=>{const k=m.id+'|'+t;DEFODD[k]=q;ODD[k]=q};
+ const full=(h,a,x12,dc,G,B,Co,Ta)=>{
+  const m=S.find(x=>x.d===e&&x.h===h&&x.a===a&&!x.nop);if(!m)return;
+  const T=fit(G,1.5,8),C=fit(Co,4,16),Kt=fit(Ta,1,12),s1=1/x12[0]+1/x12[1]+1/x12[2],x=lam(T,(1/x12[0])/s1),K=kLg(m.lg);
+  m.gh=x/K;m.ga=(T-x)/K;if(m.gh0!==undefined){m.gh0=m.gh;m.ga0=m.ga}
+  m.c=C;m.lc=Math.floor(C)+.5;m.k=Kt;m.lk=Math.floor(Kt)+.5;
+  set(m,'Gana '+h,x12[0]);set(m,'Empate',x12[1]);set(m,'Gana '+a,x12[2]);
+  set(m,'1X ('+h+' o empate)',dc[0]);set(m,'X2 (empate o '+a+')',dc[1]);set(m,'12 (sin empate)',dc[2]);
+  set(m,'Ambos marcan: Sí',B[0]);set(m,'Ambos marcan: No',B[1]);
+  G.forEach(([l,o,u])=>{if(l<=4.5){set(m,'Más de '+l+' goles',o);set(m,'Menos de '+l+' goles',u)}});
+  Co.forEach(([l,o,u])=>{set(m,'Más de '+l+' córners',o);set(m,'Menos de '+l+' córners',u)});
+  Ta.forEach(([l,o,u])=>{set(m,'Más de '+l+' tarjetas',o);set(m,'Menos de '+l+' tarjetas',u)});
+ };
+ /* solo 1X2: el total de goles queda en el promedio de la liga (el app le aplica su factor propio) */
+ const only=(z,h,a,x12)=>{
+  const m=S.find(x=>x.d===e&&x.h===h&&x.a===a&&!x.nop);if(!m)return;
+  const g=BASE[z].g,s1=1/x12[0]+1/x12[1]+1/x12[2],x=lam(g,(1/x12[0])/s1);
+  m.gh=x;m.ga=g-x;if(m.gh0!==undefined){m.gh0=m.gh;m.ga0=m.ga}
+  set(m,'Gana '+h,x12[0]);set(m,'Empate',x12[1]);set(m,'Gana '+a,x12[2]);
+ };
+ full('Boca','Independiente Rivadavia',[1.65,3.60,6.00],[1.15,2.27,1.28],[[1.5,1.44,2.85],[2.5,2.27,1.65],[3.5,4.15,1.24]],[2.15,1.65],[[8.5,1.55,2.35],[9.5,1.93,1.82],[10.5,2.50,1.50]],[[4.5,1.55,2.37],[5.5,2.00,1.75],[6.5,2.75,1.42]]);
+ only('R','Atlético-MG','Corinthians',[2.55,3.25,2.87]);
+ only('CH','Burnley','Birmingham',[2.87,3.55,2.40]);
+ only('CH','Bolton','West Brom',[3.60,3.65,2.02]);
+ only('CH','Watford','Blackburn',[2.55,3.35,2.77]);
+})();
+UPDLOG('25 nov 2026, 6:30 a. m.','Boca–Independiente Rivadavia: cuotas completas de la casa (1X2, doble oportunidad, goles, ambos marcan, córners y tarjetas). Atlético-MG–Corinthians, Burnley–Birmingham, Bolton–West Brom y Watford–Blackburn: cuotas 1X2 de la casa. Faltan Stoke–Millwall y Santa Fe–Once Caldas');
+try{applyAdj();VER++}catch(e){}
+
+/* Actualización miércoles 25 nov 2026 (6:10 a. m. Bogotá): no hay resultados nuevos desde anoche; el primer partido de hoy es a las 12:45 p. m. (Champions). Cuotas de la casa cargadas en los partidos de hoy. */
+SNAP='2026-11-25';SNAPL='25 nov';
+UPDLOG('25 nov 2026, 6:10 a. m.','Al día al miércoles 25 nov 2026, 6:10 a. m. (Bogotá): todos los resultados de ayer están cargados y hoy aún no se juega nada (el primer partido es a las 12:45 p. m.). Cuotas de la casa cargadas en los 9 partidos de Champions, Boca–Independiente Rivadavia y Nacional–Medellín, y el 1X2 de 5 partidos más. Faltan cuotas de Santa Fe–Once Caldas y Stoke–Millwall');
 try{applyAdj();VER++}catch(e){}
 try{applyAdj();VER++}catch(e){}
 
