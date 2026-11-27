@@ -1241,7 +1241,7 @@ function stepLegs(A,date,step,lo,hi){lo=lo==null?step-.1:lo;hi=hi==null?step+.15
   if(best)out.push(best)});return out}
 function bestChain(L,maxK,lam,nowM){lam=lam==null?1.5:lam;L.sort((a,b)=>a.s-b.s);const n=L.length;if(!n||maxK<1)return[];const NEG=-1e9,lp=L.map(x=>Math.log(x.p)),G=[],Pn=[];
  for(let i=0;i<n;i++){G[i]=[];Pn[i]=[];for(let k=0;k<=maxK;k++)G[i][k]=NEG;G[i][1]=lp[i]}
- for(let k=2;k<=maxK;k++)for(let i=n-1;i>=0;i--){let best=NEG,bj=-1;for(let j=i+1;j<n;j++){if(L[j].s<L[i].s+120||G[j][k-1]<=NEG/2)continue;const gap=Math.max(0,L[j].s-(L[i].s+115))/60,v=G[j][k-1]-lam*gap;if(v>best){best=v;bj=j}}if(bj>=0){G[i][k]=lp[i]+best;Pn[i][k]=bj}}
+ for(let k=2;k<=maxK;k++)for(let i=n-1;i>=0;i--){let best=NEG,bj=-1;for(let j=i+1;j<n;j++){if(L[j].s<L[i].s+LGAP||G[j][k-1]<=NEG/2)continue;const gap=Math.max(0,L[j].s-(L[i].s+115))/60,v=G[j][k-1]-lam*gap;if(v>best){best=v;bj=j}}if(bj>=0){G[i][k]=lp[i]+best;Pn[i][k]=bj}}
  let K=0,bi=-1;for(let k=maxK;k>=1&&!K;k--){let b=NEG;for(let i=0;i<n;i++){const w=nowM!=null?.3*Math.max(0,L[i].s-nowM)/60:0,v=G[i][k]>NEG/2?G[i][k]-w:NEG;if(v>b){b=v;bi=i}}if(b>NEG/2)K=k}
  if(!K)return[];const out=[];let i=bi,k=K;out.push(L[i]);while(k>1){i=Pn[i][k];k--;out.push(L[i])}return out}
 const fmtMin=m=>{m=Math.round(m);const h=Math.floor(m/60),r=m%60;return h?h+' h'+(r?' '+r+' min':''):r+' min'};
@@ -1251,7 +1251,7 @@ function ladNodes(A,days,skip){const out=[];days.forEach(d=>{const date=iso(d);A
 function optLadder(N,start,goal,lam,nowM,maxK){const T=Math.log(goal/start);if(!(T>0)||!N.length)return null;const dl=.025,NB=Math.ceil(T/dl),n=N.length,W=NB+1,NEG=-1e18,inc=N.map(x=>Math.max(1,Math.floor(Math.log(x.o)/dl))),lp=N.map(x=>Math.log(x.p));
  const V=new Float64Array(n*W).fill(NEG),PN=new Int32Array(n*W).fill(-1),PB=new Int32Array(n*W).fill(-1),K=new Int16Array(n*W);
  for(let v=0;v<n;v++){const b0=Math.min(NB,inc[v]),w0=N[v].day===0&&nowM!=null?.3*Math.max(0,N[v].s-nowM)/60:0,i0=v*W+b0;if(lp[v]-w0>V[i0]){V[i0]=lp[v]-w0;K[i0]=1}
-  for(let u=0;u<v;u++){const same=N[u].day===N[v].day;if(same&&N[v].s<N[u].s+120)continue;const pen=lam*(same?Math.max(0,N[v].s-(N[u].s+115))/60:0)+(same?0:.22*(N[v].day-N[u].day));for(let b=0;b<NB;b++){const iu=u*W+b,vu=V[iu];if(vu<=NEG/2||K[iu]>=maxK)continue;const nb=Math.min(NB,b+inc[v]),iv=v*W+nb,cand=vu+lp[v]-pen;if(cand>V[iv]){V[iv]=cand;PN[iv]=u;PB[iv]=b;K[iv]=K[iu]+1}}}}
+  for(let u=0;u<v;u++){const same=N[u].day===N[v].day;if(same&&N[v].s<N[u].s+LGAP)continue;const pen=lam*(same?Math.max(0,N[v].s-(N[u].s+115))/60:0)+(same?0:.22*(N[v].day-N[u].day));for(let b=0;b<NB;b++){const iu=u*W+b,vu=V[iu];if(vu<=NEG/2||K[iu]>=maxK)continue;const nb=Math.min(NB,b+inc[v]),iv=v*W+nb,cand=vu+lp[v]-pen;if(cand>V[iv]){V[iv]=cand;PN[iv]=u;PB[iv]=b;K[iv]=K[iu]+1}}}}
  let bv=-1,bval=NEG;for(let v=0;v<n;v++){const iv=v*W+NB;if(V[iv]>bval){bval=V[iv];bv=v}}if(bv<0)return null;
  const out=[];let v=bv,b=NB;while(v>=0){out.push(N[v]);const iv=v*W+b,pu=PN[iv],pb=PB[iv];v=pu;b=pb}out.reverse();return{steps:out,val:bval,prob:out.reduce((a,x)=>a*x.p,1)}}
 function planOpt(c,fromAmt,goal,skip,dayFixed){const A=D.concat(S),day=c.ver==='day',now=nowB()[1];let best=null;
@@ -1334,7 +1334,7 @@ const MM=new Map(D.concat(S).map(m=>[m.id,m]));N=N.filter(n=>{const m=MM.get(n.m
 return N.filter(n=>{n.p*=({r:1,dc:1,g:.93,b:.9}[n.fa]||.93);return n.p>=RFLOOR[RISK]})}}
 function maxChain(N,Lmax,start,goal){N=N.slice().sort((a,b)=>(a.day*1440+a.s)-(b.day*1440+b.s));const n=N.length;if(!n)return null;const dp=[];
 for(let L=1;L<=Lmax;L++){dp[L]=new Array(n).fill(null);for(let i=0;i<n;i++){if(L===1){dp[1][i]={lp:Math.log(N[i].p),pr:-1};continue}
-for(let j=0;j<i;j++){const q=dp[L-1][j];if(!q)continue;if(N[i].day===N[j].day&&N[i].s<N[j].s+120)continue;if(N[i].mid===N[j].mid)continue;const lp=q.lp+Math.log(N[i].p);if(!dp[L][i]||lp>dp[L][i].lp)dp[L][i]={lp,pr:j}}}}
+for(let j=0;j<i;j++){const q=dp[L-1][j];if(!q)continue;if(N[i].day===N[j].day&&N[i].s<N[j].s+LGAP)continue;if(N[i].mid===N[j].mid)continue;const lp=q.lp+Math.log(N[i].p);if(!dp[L][i]||lp>dp[L][i].lp)dp[L][i]={lp,pr:j}}}}
 for(let L=Lmax;L>=1;L--){let bi=-1;for(let i=0;i<n;i++)if(dp[L][i]&&(bi<0||dp[L][i].lp>dp[L][bi].lp))bi=i;if(bi<0)continue;
 let st=[],i=bi,l=L;while(i>=0&&l>=1){st.push(N[i]);i=dp[l][i].pr;l--}st.reverse();
 let acc=start,cut=st.length;for(let k=0;k<st.length;k++){acc*=st[k].o;if(acc>=goal){cut=k+1;break}}st=st.slice(0,cut);
@@ -1564,7 +1564,7 @@ const _cmk=card;card=function(m){const h=_cmk(m);if(m.z!=='W'||m.d!=='2026-11-07
 const _uc=usCard;usCard=function(g,c){let h=_uc(g,c);if(g[0]!=='NBA'||c==='fin'||g[1]<'2026-11-07')return h;const est=g[9]==='e'?"<div class='note'>ℹ️ Probabilidad estimada por el récord de la temporada (el proveedor aún no publica la suya).</div>":'',tot="<div class='why1'>🔢 Puntos: el promedio de la liga es ≈ 228. Con la línea de Betano: <b>Más</b> si es 224 o menos, <b>Menos</b> si es 232 o más; en medio no hay ventaja.</div>";return h.replace(/<\/div>$/,est+tot+'</div>')};
 const CBS={st:10000,pay:350000,dst:10000},copc=n=>Math.round(n).toLocaleString('es-CO');
 var NBA_OK=[];
-function cbLegs(){const out=[],nb=nowB();D.concat(S).forEach(m=>{if(m.sc||m.nop||m.gh===undefined||status(m)!=='prox')return;let b=null;try{const f=fpick(m);if(f&&f.o>=1.25&&(f.dbl||['r','dc','g','b'].indexOf(f.f)>-1))b={p:f.p,o:f.o,n:f.n}}catch(e){}if(b&&!cerr(m,b.n))out.push({k:m.id,d:m.d,hr:m.hr||'',t:m.h+' vs '+m.a,pk:b.n,p:b.p,o:b.o})});US.forEach(g=>{if(g[0]!=='NBA'||g[5]==null||g[6]||g[1]<iso(0)||usCls(g,nb)!=='prox')return;const f=g[5]>=50;let p=(f?g[5]:100-g[5])/100;if(g[9]==='e')p=.5+(p-.5)*.8;const pkk='Gana '+(f?g[4]:g[3]),o2=ODD['nba'+g[1]+g[3]+g[4]+'|'+pkk]||1/(p*1.05);if(o2<1.25||p<.58||NBA_OK.indexOf('nba'+g[1]+g[3]+g[4]+'|'+pkk)<0)return;out.push({k:'nba'+g[1]+g[3]+g[4],d:g[1],hr:g[2],t:g[3]+' @ '+g[4]+' (NBA)',pk:pkk,p:p,o:o2,nba:1,ah:g[3],hh:g[4]})});return out.sort((a,b)=>(a.nba?1:0)-(b.nba?1:0)||b.p-a.p)}
+function cbLegs(){const out=[],nb=nowB();D.concat(S).forEach(m=>{if(m.sc||m.nop||m.gh===undefined||status(m)!=='prox')return;let b=null;try{const f=fpick(m);if(f&&f.o>=1.25&&(f.dbl||['r','dc','g','b'].indexOf(f.f)>-1||(f.alt&&['c','k'].indexOf(f.f)>-1)))b={p:f.p,o:f.o,n:f.n}}catch(e){}if(b&&!cerr(m,b.n))out.push({k:m.id,d:m.d,hr:m.hr||'',t:m.h+' vs '+m.a,pk:b.n,p:b.p,o:b.o})});US.forEach(g=>{if(g[0]!=='NBA'||g[5]==null||g[6]||g[1]<iso(0)||usCls(g,nb)!=='prox')return;const f=g[5]>=50;let p=(f?g[5]:100-g[5])/100;if(g[9]==='e')p=.5+(p-.5)*.8;const pkk='Gana '+(f?g[4]:g[3]),o2=ODD['nba'+g[1]+g[3]+g[4]+'|'+pkk]||1/(p*1.05);if(o2<1.25||p<.58||NBA_OK.indexOf('nba'+g[1]+g[3]+g[4]+'|'+pkk)<0)return;out.push({k:'nba'+g[1]+g[3]+g[4],d:g[1],hr:g[2],t:g[3]+' @ '+g[4]+' (NBA)',pk:pkk,p:p,o:o2,nba:1,ah:g[3],hh:g[4]})});return out.sort((a,b)=>(a.nba?1:0)-(b.nba?1:0)||b.p-a.p)}
 function oddBox(k,p){if(!k)return '';const q=ODD[k];return `<div class='ob' style='margin-top:6px;display:flex;gap:6px;align-items:center;flex-wrap:wrap'><input class='oi' type='text' step='0.01' inputmode='decimal' placeholder='Cuota Betano' data-ok='${esc(k)}' data-p='${(+p).toFixed(3)}' value='${q||''}' style='width:112px'><span class='od2 note' style='margin:0'>${q?verd(p,q):'Pon la cuota real de Betano y reviso si el pick se mantiene'}</span></div>`}
 function cbRow(x){const k=x.k+'|'+x.pk;return `<div data-pk='${esc(k)}' data-lbl='${esc(x.pk+' · '+x.t)}' style='display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--line)'><div><b>${esc(x.pk)}</b><div class='note' style='margin:0'>${esc(x.t)} · ${dl(x.d)} ${x.hr}</div>${oddBox(k,x.p)}</div><div style='text-align:right'><b>${x.o.toFixed(2)}</b><div class='note' style='margin:0'>${pct(x.p)}${ODD[k]?' · Betano':' · est.'}</div></div></div>`}
 function drawCB(){const L=cbLegs(),w="<div class='note'>Las cuotas son estimadas por el modelo; las reales de Betano suelen ser algo menores. Aun escogiendo lo más seguro, una combinada larga casi siempre pierde: juega solo lo que puedas perder.</div>";
@@ -2607,6 +2607,205 @@ try{applyAdj();VER++}catch(e){}
 /* Actualización miércoles 25 nov 2026 (6:10 a. m. Bogotá): no hay resultados nuevos desde anoche; el primer partido de hoy es a las 12:45 p. m. (Champions). Cuotas de la casa cargadas en los partidos de hoy. */
 SNAP='2026-11-25';SNAPL='25 nov';
 UPDLOG('25 nov 2026, 6:10 a. m.','Al día al miércoles 25 nov 2026, 6:10 a. m. (Bogotá): todos los resultados de ayer están cargados y hoy aún no se juega nada (el primer partido es a las 12:45 p. m.). Cuotas de la casa cargadas en los 9 partidos de Champions, Boca–Independiente Rivadavia y Nacional–Medellín, y el 1X2 de 5 partidos más. Faltan cuotas de Santa Fe–Once Caldas y Stoke–Millwall');
+try{applyAdj();VER++}catch(e){}
+
+/* Miércoles 25 nov 2026, 8:15 p. m. (Bogotá): resultados de hoy (Champions, Championship, NBA) y partidos del jueves 26 (Europa League, Conference League y League One) con el 1X2 de la casa. Faltan resultados de Atlético-MG–Corinthians, Santa Fe–Once Caldas, Boca–Independiente Rivadavia y Nacional–Medellín (en juego o por jugar). */
+(function(){
+ const rr=(h,a,d,sc,gt)=>{const m=S.find(x=>x.h===h&&x.a===a&&x.d===d&&!x.nop);if(!m)return;m.sc=sc;if(gt)m.gt=gt};
+ let d='2026-11-25';
+ [['Sabah','Barcelona','1-4'],['Slavia Praga','Villarreal','0-1'],['Atlético Madrid','Viking','2-0'],['Club Brugge','Liverpool','0-3'],['Inter','Stuttgart','2-0'],['Shakhtar','Fenerbahçe','0-1'],['Lille','Bayern','2-1'],['PSG','Roma','2-2'],['Sporting CP','Man United','2-2'],
+  ['Bolton','West Brom','1-3'],['Burnley','Birmingham','0-2'],['Watford','Blackburn','0-1'],['Stoke','Millwall','2-1']].forEach(([h,a,sc])=>rr(h,a,d,sc));
+ const nb=US.find(x=>x[0]==='NBA'&&x[1]===d&&x[3]==='Heat'&&x[4]==='76ers');if(nb)nb[6]=[104,111];
+ N.L1=N.L1||'League One';BASE.L1=BASE.L1||{g:2.65,c:10,k:3.8,t:24,tp:8.2};BASE.K=BASE.K||{g:2.8,c:9.6,k:4.1,t:24,tp:8.4};
+ const mk=(z,dd,hr,h,a,x12)=>{
+  if(S.some(x=>x.d===dd&&x.h===h&&x.a===a))return;const B=BASE[z],s1=1/x12[0]+1/x12[1]+1/x12[2],x=lam(B.g,(1/x12[0])/s1);
+  const m={id:sid('x'+z+dd.replace(/-/g,'')+h+a),seed:1,z:z,lg:N[z],d:dd,hr:hr,h:h,a:a,gh:x,ga:B.g-x,c:B.c,k:B.k,t:B.t,tp:B.tp,lc:Math.floor(B.c)+.5,lk:Math.floor(B.k)+.5};
+  S.push(m);[['Gana '+h,x12[0]],['Empate',x12[1]],['Gana '+a,x12[2]]].forEach(([t,q])=>{const k=m.id+'|'+t;DEFODD[k]=q;ODD[k]=q})};
+ d='2026-11-26';
+ [['12:45','Salzburg','Ararat-Armenia',[1.17,7.80,15.50]],['12:45','Marseille','Levski Sofia',[1.37,5.00,8.50]],['12:45','Dinamo Zagreb','Leverkusen',[4.35,4.35,1.70]],['12:45','Celta Vigo','Bournemouth',[3.45,3.45,2.12]],
+  ['12:45','Olympiacos','Milan',[2.80,3.50,2.45]],['12:45','Union Saint-Gilloise','Lech Poznan',[1.38,5.30,7.30]],['15:00','Ferencváros','Celje',[1.37,5.10,8.00]],['15:00','Lyon','Lillestrøm',[1.25,6.40,10.75]],
+  ['15:00','Sparta Praga','AZ Alkmaar',[2.92,3.60,2.32]],['15:00','Juventus','Omonia Nicosia',[1.19,7.10,15.50]],['15:00','NEC Nijmegen','Rennes',[3.10,3.95,2.10]],['15:00','Hoffenheim','Sturm Graz',[1.35,5.20,8.50]],
+  ['15:00','Torreense','Celtic',[4.60,4.25,1.67]],['15:00','OFI Creta','Anderlecht',[4.35,3.80,1.80]],['15:00','Crystal Palace','Real Sociedad',[2.07,3.90,3.20]],['15:00','Sunderland','Jagiellonia',[1.26,5.80,12.00]]
+ ].forEach(([hr,h,a,o])=>mk('E',d,hr,h,a,o));
+ [['10:30','Kairat','Mjallby',[2.12,3.55,3.40]],['12:45','Kauno Zalgiris','Riga',[3.45,3.45,2.12]],['12:45','Jablonec','Lugano',[3.25,3.60,2.15]],['12:45','Iberia 1999','Getafe',[7.90,4.35,1.44]],
+  ['12:45','Brighton','Universitatea Craiova',[1.14,8.00,21.00]],['12:45','Brann','Aarhus',[2.15,3.85,3.10]],['12:45','Egnatia','Lincoln Red Imps',[1.60,4.40,5.10]],['12:45','Pafos','Midtjylland',[2.95,3.60,2.30]],
+  ['12:45','Hearts','Monaco',[5.40,4.35,1.57]],['12:45','Ajax','Thun',[1.19,7.50,13.50]],['15:00','Inter Escaldes','Copenhagen',[12.00,6.10,1.24]],['15:00','Nordsjælland','Panathinaikos',[2.60,3.60,2.57]],
+  ['15:00','Hajduk Split','Sint-Truiden',[2.15,3.60,3.25]],['15:00','Borac Banja Luka','Atalanta',[6.20,5.00,1.45]],['15:00','Friburgo','Twente',[2.07,3.90,3.25]],['15:00','CSKA Sofia','Trabzonspor',[4.35,3.90,1.78]],
+  ['15:00','Braga','Kuopio',[1.14,8.25,19.00]],['15:00','Gent','Estrella Roja',[2.18,3.50,3.25]]
+ ].forEach(([hr,h,a,o])=>mk('K',d,hr,h,a,o));
+ mk('L1',d,'15:00','Doncaster','Huddersfield',[4.20,4.00,1.72]);
+})();
+UPDLOG('25 nov 2026, 8:15 p. m.','Resultados de hoy: Champions (9), Championship (4) y Heat–76ers. Cargados los partidos del jueves 26 de las capturas: 16 de Europa League, 18 de Conference League y Doncaster–Huddersfield (League One), solo con el 1X2 de la casa. Pendientes de resultado: Atlético-MG–Corinthians, Santa Fe–Once Caldas, Boca–Independiente Rivadavia y Nacional–Medellín; y varios juegos de la NBA en curso');
+try{applyAdj();VER++}catch(e){}
+
+/* Contexto manual (25 nov 2026, 8:45 p. m.): bajas e importancia de los partidos del jueves 26. Fuentes: previas de Sempre Milan, TuFutbolero, WhoScored, Sports Mole, Goal e IANS. Son estimaciones mías; mueven los goles esperados entre -15% y +10%. */
+CTX('Olympiacos','Milan','2026-11-26',.92,.95,'Milan es 28.º con 3 puntos y necesita ganar; Olympiacos es 6.º con 10. Olympiacos sin tres delanteros (El Kaabi, Yazici y Chiquinho) ni Puerta. Milan sin seis (Modric, Loftus-Cheek, Gabbia, Tomori, Saelemaekers y Chukwueze, más Camarda y Bartesaghi) y con Pavlovic en duda.');
+CTX('Dinamo Zagreb','Leverkusen','2026-11-26',.96,.95,'Leverkusen tiene la mejor defensa del torneo (1 gol recibido en 4 partidos) pero sin Terrier, Doué ni Eichhorn. Dinamo sin Mudražija ni McKenna y llega con 12 goles en sus últimos 6 partidos.');
+CTX('Celta Vigo','Bournemouth','2026-11-26',.95,1.05,'Bournemouth ganó los 4 partidos de la fase de liga (10 victorias seguidas, récord del club); Celta perdió 3 de 4 en Europa y no ha ganado en casa. Celta con dudas: Borja Iglesias, Starfelt, Manu Sánchez y Miguel Román. Bournemouth sin Araujo ni Juanlu Sánchez.');
+CTX('Marseille','Levski Sofia','2026-11-26',1.0,1.05,'Marseille es 31.º y necesita puntos tras una derrota dolorosa en la liga; Levski es 10.º y viene de ganar 4-1 en su liga. No encontré lista confiable de bajas de Marseille.');
+CTX('Lyon','Lillestrøm','2026-11-26',1.0,.88,'Lyon (13.º) tiene récord perfecto en casa en Europa y puede meterse al top 8; Lillestrøm (34.º) lleva 10 goles recibidos y solo 2 marcados. Lyon con dudas: Morton y Sulc; Ouedraogo está lesionado. ⚠️ Favorito fuerte: puede rotar; revisa la alineación 1 hora antes antes de ponerlo en un ticket.');
+CTX('Juventus','Omonia Nicosia','2026-11-26',1.0,1.0,'Juventus es 5.ª y viene de golear 4-0 a Venezia; Omonia es 18.º. No encontré bajas confirmadas de ninguno. ⚠️ Favorito fuerte: puede rotar; revisa la alineación 1 hora antes antes de ponerlo en un ticket.');
+CTX('Ferencváros','Celje','2026-11-26',1.0,1.0,'Ferencváros lidera con 4 victorias en 4 partidos (12 puntos). No encontré bajas confirmadas. ⚠️ Favorito fuerte: puede rotar; revisa la alineación 1 hora antes antes de ponerlo en un ticket.');
+UPDLOG('25 nov 2026, 8:45 p. m.','Contexto de 7 partidos del jueves 26 (bajas, forma e importancia): Olympiacos–Milan, Dinamo Zagreb–Leverkusen, Celta–Bournemouth, Marseille–Levski, Lyon–Lillestrøm, Juventus–Omonia y Ferencváros–Celje. Son ajustes manuales míos y se ven en el panel de cada partido');
+try{applyAdj();VER++}catch(e){}
+
+/* Lille 2-1 Bayern (25 nov): Bayern salió con un once alterno (Urbig, Stanišić, Upamecano, Kim, Ito, Kimmich, Pavlović, Laimer, Bischof, Brown y Karl), sin Kane, Olise, Díaz ni Musiala. El modelo no lo tenía en cuenta. */
+(function(){const m=S.find(x=>x.d==='2026-11-25'&&x.h==='Lille'&&x.a==='Bayern');if(m)m.gt='Bayern jugó con un once alterno, sin Kane, Olise, Díaz ni Musiala. El modelo lo daba favorito (Gana Bayern 61%) sin saberlo'})();
+UPDLOG('25 nov 2026, 9:30 p. m.','Corrección tras Lille 2-1 Bayern: Bayern salió con un once alterno y el modelo no lo sabía. Quité los refuerzos que le había dado a Juventus, Lyon y Ferencváros (favoritos fuertes de mañana) y puse un aviso de posible rotación: revisa la alineación 1 hora antes antes de poner un favorito en un ticket');
+try{applyAdj();VER++}catch(e){}
+
+/* Jueves 26 nov 2026, 5:10 a. m. (Bogotá): resultados de anoche, cuotas de doble oportunidad del jueves (capturas de la casa, 4:56 a 4:58 a. m.) y tres partidos que faltaban (Besiktas–Hapoel, Plzen–Benfica y Burnley Sub-21–Wolves Sub-21, con 1X2 calculado a partir de la doble oportunidad). */
+(function(){
+ const rr=(h,a,d,sc,gt)=>{const m=S.find(x=>x.h===h&&x.a===a&&x.d===d&&!x.nop);if(!m)return;m.sc=sc;if(gt)m.gt=gt};
+ let d='2026-11-25';
+ rr('Atlético-MG','Corinthians',d,'1-1');rr('Santa Fe','Once Caldas',d,'3-0');rr('Nacional','Medellín',d,'3-1');
+ rr('Boca','Independiente Rivadavia',d,'2-0','Paredes (penal polémico dado tras revisar el VAR) y Merentiel. Boca pasa a cuartos contra Gimnasia LP');
+ const nb=(dd,a,h,fin,ph)=>{const g=US.find(x=>x[0]==='NBA'&&x[1]===dd&&x[3]===a&&x[4]===h);if(!g)return;if(fin)g[6]=fin;if(ph!=null){g[5]=ph;g[9]=undefined}};
+ nb(d,'Bulls','Hornets',[107,105]);nb(d,'Cavaliers','Knicks',[102,121]);nb(d,'Timberwolves','Thunder',[113,106]);nb(d,'Clippers','Grizzlies',[97,115]);
+ nb(d,'Nets','Bucks',[104,97]);nb(d,'Suns','Rockets',[104,116]);nb(d,'Kings','Warriors',[110,129]);nb(d,'Spurs','Trail Blazers',[111,116]);
+ d='2026-11-27';
+ nb(d,'Heat','Knicks',null,61);nb(d,'76ers','Pacers',null,37.8);nb(d,'Hawks','Celtics',null,76.5);nb(d,'Nuggets','Jazz',null,22.9);nb(d,'Lakers','Spurs',null,65.9);
+ /* partidos nuevos con 1X2 derivado de 1X / X2 / 12 */
+ N.PLC=N.PLC||'Premier League Cup (Sub-21)';BASE.PLC=BASE.PLC||{g:3.2,c:10,k:3,t:24,tp:8};
+ const fromDC=(a,b,c)=>{const q=[1/a,1/b,1/c],f=2/(q[0]+q[1]+q[2]),P1X=q[0]*f,PX2=q[1]*f,P12=q[2]*f;const p1=P1X+P12-1,p2=PX2+P12-1,px=P1X+PX2-1;return [1/(p1*1.06),1/(px*1.06),1/(p2*1.06)].map(v=>Math.round(v*100)/100)};
+ const mk=(z,dd,hr,h,a,dc)=>{
+  if(S.some(x=>x.d===dd&&x.h===h&&x.a===a))return;const B=BASE[z],x12=fromDC(dc[0],dc[1],dc[2]),s1=1/x12[0]+1/x12[1]+1/x12[2],x=lam(B.g,(1/x12[0])/s1);
+  const m={id:sid('x'+z+dd.replace(/-/g,'')+h+a),seed:1,z:z,lg:N[z],d:dd,hr:hr,h:h,a:a,gh:x,ga:B.g-x,c:B.c,k:B.k,t:B.t,tp:B.tp,lc:Math.floor(B.c)+.5,lk:Math.floor(B.k)+.5};
+  S.push(m);[['Gana '+h,x12[0]],['Empate',x12[1]],['Gana '+a,x12[2]]].forEach(([t,q])=>{const k=m.id+'|'+t;DEFODD[k]=q;ODD[k]=q})};
+ d='2026-11-26';
+ mk('E',d,'12:45','Besiktas','Hapoel Beer Sheva',[1.07,4.00,1.12]);
+ mk('E',d,'12:45','Viktoria Plzen','Benfica',[2.70,1.16,1.17]);
+ mk('PLC',d,'14:00','Burnley Sub-21','Wolves Sub-21',[1.67,1.38,1.23]);
+ /* doble oportunidad de la casa: 1X / X2 / 12 */
+ [['Gent','Estrella Roja',1.40,1.67,1.29],['Doncaster','Huddersfield',2.22,1.23,1.23],['Borac Banja Luka','Atalanta',2.95,1.13,1.17],['Friburgo','Twente',1.26,2.02,1.25],
+  ['CSKA Sofia','Trabzonspor',2.10,1.23,1.25],['Braga','Kuopio',1.03,5.60,1.09],['Ajax','Thun',1.05,4.90,1.09],['Inter Escaldes','Copenhagen',4.10,1.06,1.13],
+  ['Nordsjælland','Panathinaikos',1.47,1.60,1.28],['Hajduk Split','Sint-Truiden',1.36,1.75,1.28],['Brann','Aarhus',1.42,1.70,1.25],['Egnatia','Lincoln Red Imps',1.19,2.40,1.21],
+  ['Pafos','Midtjylland',1.62,1.45,1.28],['Hearts','Monaco',2.50,1.17,1.20],['Kauno Zalgiris','Riga',1.75,1.34,1.30],['Jablonec','Lugano',1.75,1.36,1.28],
+  ['Iberia 1999','Getafe',2.67,1.12,1.22],['Brighton','Universitatea Craiova',1.02,6.60,1.07],['OFI Creta','Anderlecht',2.02,1.25,1.25],['Crystal Palace','Real Sociedad',1.37,1.80,1.25],
+  ['Sunderland','Jagiellonia',1.06,4.10,1.13],['Kairat','Mjallby',1.36,1.70,1.30],['Juventus','Omonia Nicosia',1.04,5.10,1.09],['NEC Nijmegen','Rennes',1.75,1.39,1.25],
+  ['Hoffenheim','Sturm Graz',1.10,3.45,1.14],['Torreense','Celtic',2.30,1.21,1.22],['Union Saint-Gilloise','Lech Poznan',1.10,3.25,1.16],['Ferencváros','Celje',1.11,3.15,1.17],
+  ['Lyon','Lillestrøm',1.06,4.40,1.11],['Sparta Praga','AZ Alkmaar',1.62,1.42,1.29],['Marseille','Levski Sofia',1.10,3.20,1.17],['Dinamo Zagreb','Leverkusen',2.22,1.24,1.21],
+  ['Celta Vigo','Bournemouth',1.83,1.30,1.28],['Olympiacos','Milan',1.57,1.45,1.29],['Besiktas','Hapoel Beer Sheva',1.07,4.00,1.12],['Viktoria Plzen','Benfica',2.70,1.16,1.17],
+  ['Salzburg','Ararat-Armenia',1.03,5.70,1.08],['Burnley Sub-21','Wolves Sub-21',1.67,1.38,1.23]
+ ].forEach(([h,a,x1,x2,x12])=>{const m=S.find(x=>x.d===d&&x.h===h&&x.a===a&&!x.nop);if(!m)return;
+  [['1X ('+h+' o empate)',x1],['X2 (empate o '+a+')',x2],['12 (sin empate)',x12]].forEach(([t,q])=>{const k=m.id+'|'+t;DEFODD[k]=q;ODD[k]=q})});
+})();
+SNAP='2026-11-26';SNAPL='26 nov';
+UPDLOG('26 nov 2026, 5:10 a. m.','Al día al jueves 26 nov (5:10 a. m. Bogotá): resultados de ayer (Atlético-MG 1-1 Corinthians, Santa Fe 3-0 Once Caldas, Nacional 3-1 Medellín, Boca 2-0 Independiente Rivadavia y los 8 juegos de NBA que faltaban). Cuotas de doble oportunidad de la casa en los partidos del jueves y 3 partidos nuevos: Besiktas–Hapoel, Plzen–Benfica y Burnley Sub-21–Wolves Sub-21 (su 1X2 sale de la doble oportunidad)');
+try{applyAdj();VER++}catch(e){}
+
+/* São Paulo–Remo (capturas de la casa, 5:04 y 5:05 a. m. del jueves 26): doble oportunidad, goles, ambos marcan, córners y tarjetas. No venía el 1X2, así que sale de la doble oportunidad. */
+(function(){
+ const e='2026-11-26',dv=(a,b)=>(1/a)/(1/a+1/b);
+ const fit=(L,lo,hi)=>{let best=lo,bv=1e9;for(let t=lo;t<=hi;t+=.01){let er=0;L.forEach(([l,o,u])=>{er+=(over(t,l)-dv(o,u))**2});if(er<bv){bv=er;best=t}}return best};
+ const m=S.find(x=>x.d===e&&x.h==='São Paulo'&&x.a==='Remo'&&!x.nop);if(!m)return;
+ const dc=[1.10,3.15,1.17],q=dc.map(v=>1/v),f=2/(q[0]+q[1]+q[2]),P1X=q[0]*f,PX2=q[1]*f,P12=q[2]*f;
+ const p=[P1X+P12-1,P1X+PX2-1,PX2+P12-1],x12=p.map(v=>Math.round(100/(v*1.06))/100);
+ const G=[[1.5,1.23,4.20],[2.5,1.70,2.18],[3.5,2.70,1.47]],Co=[[10.5,1.65,2.15],[11.5,2.02,1.75],[12.5,2.62,1.45]],Ta=[[3.5,1.57,2.30],[4.5,2.15,1.65],[5.5,3.15,1.33]];
+ const T=fit(G,1.5,8),C=fit(Co,4,16),Kt=fit(Ta,1,12),x=lam(T,p[0]),K=kLg(m.lg);
+ m.gh=x/K;m.ga=(T-x)/K;if(m.gh0!==undefined){m.gh0=m.gh;m.ga0=m.ga}
+ m.c=C;m.lc=Math.floor(C)+.5;m.k=Kt;m.lk=Math.floor(Kt)+.5;
+ const set=(t,v)=>{const k=m.id+'|'+t;DEFODD[k]=v;ODD[k]=v};
+ set('Gana São Paulo',x12[0]);set('Empate',x12[1]);set('Gana Remo',x12[2]);
+ set('1X (São Paulo o empate)',dc[0]);set('X2 (empate o Remo)',dc[1]);set('12 (sin empate)',dc[2]);
+ set('Ambos marcan: Sí',1.98);set('Ambos marcan: No',1.78);
+ G.forEach(([l,o,u])=>{set('Más de '+l+' goles',o);set('Menos de '+l+' goles',u)});
+ Co.forEach(([l,o,u])=>{set('Más de '+l+' córners',o);set('Menos de '+l+' córners',u)});
+ Ta.forEach(([l,o,u])=>{set('Más de '+l+' tarjetas',o);set('Menos de '+l+' tarjetas',u)});
+})();
+UPDLOG('26 nov 2026, 5:20 a. m.','São Paulo–Remo: cuotas de la casa (doble oportunidad, goles, ambos marcan, córners y tarjetas) y goles, córners y tarjetas esperados recalculados con ellas. Su 1X2 sale de la doble oportunidad');
+try{applyAdj();VER++}catch(e){}
+
+/* Combinadas (26 nov 2026): menos pestañas y picks distintos entre tickets.
+   1) La pestaña Picks pasa de 8 a 4: Ganemos hoy, Top 5, Combinada y Cuotas altas (se ocultan Lo de hoy, Combinada fija, Mejores del día y Dobles, que repetían los mismos picks).
+   2) Combinada y Cuotas altas ya no usan el pick principal de cada partido: Combinada usa la 2.ª mejor opción de ese partido y Cuotas altas la 3.ª, siempre de otro mercado (goles, ambos marcan, un resultado compatible, o córners y tarjetas solo si hay cuota real de la casa; nunca la contraria). Si un partido no tiene otra opción buena, se deja fuera de ese ticket en vez de repetir el mismo pick. */
+(function(){
+ try{const g=GRP.find(x=>x[1]==='Picks');if(g)g[2]=['ganemos','top5','comb','altas']}catch(e){}
+ const _fp=fpick;
+ const SL={comb:1,altas:2};
+ const sides=(lab,m)=>{let r;if(lab==='Empate')return['D'];if(lab==='Gana '+m.h)return['H'];if(lab==='Gana '+m.a)return['A'];if(lab.indexOf('1X (')===0)return['H','D'];if(lab.indexOf('X2 (')===0)return['D','A'];if(lab.indexOf('12 (')===0)return['H','A'];return null};
+ fpick=function(m){
+  const base=_fp(m),sl=SL[ACT]||0;if(!sl||!base)return base;
+  try{
+   const c=calc(m),b=c.best;if(!b)return base;
+   const sb=sides(b[0],m);
+   const alts=c.P.filter(x=>(['r','dc','g','b'].indexOf(x[2])>-1||(['c','k'].indexOf(x[2])>-1&&ODD[m.id+'|'+x[0]]))&&x[2]!==b[2]&&x[0]!==b[0]&&x[1]>=.55&&(ODD[m.id+'|'+x[0]]||estO(m,x[1]))>=1.3).filter(x=>{const sx=sides(x[0],m);if(sb&&sx)return sb.every(v=>sx.indexOf(v)>-1);return true}).sort((a,z)=>z[1]-a[1]);
+   const pick=alts[sl-1];if(!pick)return null;
+   return{n:pick[0],p:pick[1],o:ODD[m.id+'|'+pick[0]]||estO(m,pick[1]),dbl:0,f:pick[2],alt:1};
+  }catch(e){return base}
+ };
+})();
+UPDLOG('26 nov 2026, combinadas','Menos combinadas y menos repetidas: la pestaña Picks pasa de 8 a 4 (Ganemos hoy, Top 5, Combinada y Cuotas altas). Combinada y Cuotas altas ya no usan el mismo pick de cada partido que Ganemos y el Top 5: usan la 2.ª y la 3.ª mejor opción de ese partido (otro mercado: goles, ambos marcan, un resultado compatible, o córners y tarjetas solo con cuota real; nunca la contraria al pick principal) y, si no hay otra opción buena, dejan el partido fuera en vez de repetirlo; así un favorito que falla ya no cae en todos los tickets');
+
+/* Viernes 27 nov 2026, 5:30 a. m. (Bogotá): resultados del jueves y partidos de viernes a lunes de Premier, Bundesliga, LaLiga, Serie A y Ligue 1 con las probabilidades del proveedor de datos (local / empate / visita). Sin contexto de bajas: solo se cargaron calendario y probabilidades. */
+(function(){
+ const rr=(h,a,d,sc,gt)=>{const m=S.find(x=>x.h===h&&x.a===a&&x.d===d&&!x.nop);if(!m)return;m.sc=sc;if(gt)m.gt=gt};
+ const d='2026-11-26';
+ [['Besiktas','Hapoel Beer Sheva','2-1'],['Salzburg','Ararat-Armenia','2-0'],['Viktoria Plzen','Benfica','4-0'],['Dinamo Zagreb','Leverkusen','0-2'],['Olympiacos','Milan','2-4'],['Marseille','Levski Sofia','1-0'],
+  ['Union Saint-Gilloise','Lech Poznan','2-2'],['Celta Vigo','Bournemouth','1-2'],['Sparta Praga','AZ Alkmaar','2-4'],['Crystal Palace','Real Sociedad','2-1'],['Ferencváros','Celje','0-0'],['Juventus','Omonia Nicosia','4-1'],
+  ['NEC Nijmegen','Rennes','3-1'],['OFI Creta','Anderlecht','1-3'],['Lyon','Lillestrøm','0-0'],['Torreense','Celtic','1-2'],['Sunderland','Jagiellonia','1-1'],['Hoffenheim','Sturm Graz','3-1'],
+  ['Kairat','Mjallby','1-0'],['Ajax','Thun','4-0'],['Brann','Aarhus','1-4'],['Brighton','Universitatea Craiova','4-0'],['Egnatia','Lincoln Red Imps','2-1'],['Hearts','Monaco','2-3'],['Iberia 1999','Getafe','1-0'],
+  ['Jablonec','Lugano','2-0'],['Kauno Zalgiris','Riga','2-0'],['Pafos','Midtjylland','0-2'],['Borac Banja Luka','Atalanta','2-3'],['CSKA Sofia','Trabzonspor','1-2'],['Friburgo','Twente','2-1'],['Gent','Estrella Roja','1-1'],
+  ['Hajduk Split','Sint-Truiden','0-2'],['Inter Escaldes','Copenhagen','2-0'],['Nordsjælland','Panathinaikos','3-2'],['São Paulo','Remo','3-1','Calleri (2) y Ryan Francisco para São Paulo; Poveda para Remo']
+ ].forEach(([h,a,sc,gt])=>rr(h,a,d,sc,gt));
+ /* partidos nuevos con probabilidades del proveedor */
+ const mk=(z,dd,hr,h,a,pw,pd,pa)=>{
+  if(S.some(x=>x.d===dd&&x.h===h&&x.a===a))return;const B=BASE[z],s1=pw+pd+pa,x=lam(B.g,pw/s1);
+  const m={id:sid('x'+z+dd.replace(/-/g,'')+h+a),seed:1,z:z,lg:N[z],d:dd,hr:hr,h:h,a:a,gh:x,ga:B.g-x,c:B.c,k:B.k,t:B.t,tp:B.tp,lc:Math.floor(B.c)+.5,lk:Math.floor(B.k)+.5};S.push(m)};
+ const F=[
+ ['P','2026-11-27','15:00','Nottm Forest','Chelsea',37.7,28,34.3],['P','2026-11-28','10:00','Leeds','Coventry',65.5,20,14.5],['P','2026-11-28','10:00','Man United','Brentford',44.9,25.4,29.7],['P','2026-11-28','12:30','Ipswich','Aston Villa',26.4,24.6,49],
+ ['P','2026-11-29','07:00','Everton','Liverpool',21.7,24.5,53.8],['P','2026-11-29','09:05','Brighton','Newcastle',62,20.6,17.4],['P','2026-11-29','09:05','Crystal Palace','Hull City',50.4,25.3,24.3],['P','2026-11-29','09:05','Fulham','Bournemouth',35.2,27.6,37.2],
+ ['P','2026-11-29','09:05','Sunderland','Tottenham',25.9,27.7,46.4],['P','2026-11-29','11:30','Arsenal','Man City',48,25.7,26.3],
+ ['B','2026-11-27','14:30','Werder Bremen','Gladbach',58,21.8,20.2],['B','2026-11-28','09:30','Mainz','Union Berlin',63.9,19.9,16.2],['B','2026-11-28','09:30','Hamburgo','Bayern',9.5,13.1,77.4],['B','2026-11-28','09:30','Köln','Elversberg',47.5,25,27.5],
+ ['B','2026-11-28','09:30','Paderborn','Schalke',37,27.5,35.5],['B','2026-11-28','12:30','Stuttgart','Eintracht Frankfurt',52.3,21.3,26.4],['B','2026-11-29','09:30','Freiburg','Leipzig',35,24.9,40.1],['B','2026-11-29','11:30','Hoffenheim','Augsburg',56.2,20.7,23.1],
+ ['B','2026-11-29','13:30','Dortmund','Leverkusen',44.9,24.2,30.9],
+ ['L','2026-11-27','15:00','Levante','Racing Santander',47.4,23.6,29],['L','2026-11-28','08:00','Betis','Rayo Vallecano',60.2,21.4,18.4],['L','2026-11-28','10:15','Málaga','Athletic',20.3,24.5,55.2],['L','2026-11-28','12:30','Elche','Atlético Madrid',14.3,19.4,66.3],
+ ['L','2026-11-28','15:00','Real Madrid','Alavés',86.3,9.1,4.6],['L','2026-11-29','08:00','Valencia','Osasuna',44.4,29.2,26.4],['L','2026-11-29','10:15','Deportivo','Barcelona',8.9,12,79.1],['L','2026-11-29','12:30','Celta','Villarreal',34.7,27.2,38.1],
+ ['L','2026-11-29','15:00','Real Sociedad','Sevilla',44.4,26.5,29.1],['L','2026-11-30','15:00','Espanyol','Getafe',45.9,29.7,24.4],
+ ['S','2026-11-27','14:45','Venezia','Bologna',31.1,29.7,39.2],['S','2026-11-28','09:00','Frosinone','Parma',65.7,18.1,16.2],['S','2026-11-28','12:00','Torino','Lazio',28.1,27.9,44],['S','2026-11-28','14:45','Inter','Genoa',73.7,16,10.3],
+ ['S','2026-11-29','06:30','Udinese','Fiorentina',31,26.7,42.3],['S','2026-11-29','09:00','Sassuolo','Napoli',20,22.3,57.7],['S','2026-11-29','12:00','Roma','Monza',81,11.8,7.2],['S','2026-11-29','14:45','Como','Juventus',48.7,26.5,24.8],
+ ['S','2026-11-30','12:30','Lecce','Atalanta',23.4,24.6,52],['S','2026-11-30','14:45','Cagliari','Milan',19.1,24.2,56.7],
+ ['F','2026-11-27','14:45','Brest','Paris FC',27.8,27.5,44.7],['F','2026-11-28','11:15','Angers','Lens',20.1,23.3,56.6],['F','2026-11-28','14:45','Le Havre','Strasbourg',30.4,27.1,42.5],['F','2026-11-28','14:45','Le Mans','Lille',26,28.1,45.9],
+ ['F','2026-11-28','14:45','Nice','Troyes',57.5,23,19.5],['F','2026-11-28','14:45','PSG','Lorient',80,12.7,7.3],['F','2026-11-29','09:00','Auxerre','Marseille',26.4,24.8,48.8],['F','2026-11-29','11:15','Toulouse','Rennes',37.3,26.6,36.1],
+ ['F','2026-11-29','14:45','Lyon','Monaco',40,28.1,31.9]];
+ F.forEach(([z,dd,hr,h,a,pw,pd,pa])=>mk(z,dd,hr,h,a,pw,pd,pa));
+})();
+SNAP='2026-11-27';SNAPL='27 nov';
+UPDLOG('27 nov 2026, 5:30 a. m.','Al día al viernes 27 nov (5:30 a. m. Bogotá): resultados del jueves (Europa League completa, Conference League menos Braga–KuPS, y São Paulo 3-1 Remo) y 49 partidos nuevos de viernes a lunes de Premier, Bundesliga, LaLiga, Serie A y Ligue 1 con las probabilidades del proveedor. Solo calendario y probabilidades: todavía sin bajas ni contexto de cada equipo');
+try{applyAdj();VER++}catch(e){}
+
+/* Reto escalera (27 nov 2026): hasta 5 pasos por día y selector de 2, 3, 4 o 5 partidos.
+   Antes los pasos de un mismo día debían empezar con 2 horas de diferencia, y eso dejaba entrar solo 2 o 3 partidos. Ahora el app prueba con 120, 90, 60 y 30 minutos y se queda con la cadena que más pasos tenga (con la separación más grande posible), así mete el máximo de partidos que quepan en un día, hasta el número que elijas. Si los pasos quedan más juntos, el resultado del paso anterior puede no estar listo antes del siguiente: el reto lo avisa. */
+var LGAP=120;
+(function(){
+ try{LCFG.nd=Math.max(2,Math.min(5,LCFG.nd>5?5:(LCFG.nd||5)))}catch(e){}
+ const _bl=buildLad;
+ buildLad=function(){
+  LCFG.nd=Math.max(2,Math.min(5,LCFG.nd||5));
+  let best=null,bn=-1,bg=120;
+  for(const g of [120,90,60,30]){
+   LGAP=g;let ok=false;try{ok=_bl()}catch(e){ok=false}
+   if(ok&&LAD&&LAD.steps&&LAD.steps.length>LCFG.nd&&LCFG.ver==='day'){
+    /* se queda con los nd pasos más probables, en orden de hora, y ajusta la meta a lo que alcanzan */
+    const keep=LAD.steps.map((x,i)=>[x.p,i]).sort((a,b)=>b[0]-a[0]).slice(0,LCFG.nd).map(x=>x[1]).sort((a,b)=>a-b);
+    LAD.steps=keep.map(i=>LAD.steps[i]);LAD.goal=Math.round(LAD.steps.reduce((a,x)=>a*(x.q>1?x.q:x.o),LAD.start));LAD.idx=0;
+   }
+   if(ok&&LAD&&LAD.steps&&LAD.steps.length>bn){best=LAD;bn=LAD.steps.length;bg=g}
+   if(bn>=LCFG.nd)break;
+  }
+  LGAP=120;
+  if(best){LAD=best;LAD.gap=bg;LADMSG=bg<120&&bn>1&&LCFG.ver==='day'?'Para meter '+bn+' partidos en el día, algunos pasos empiezan con solo '+bg+' minutos de diferencia: el partido anterior puede no haber terminado cuando empiece el siguiente. Revisa el resultado antes de seguir.':LADMSG;return true}
+  return false;
+ };
+ try{
+  const row=document.querySelector('[data-risk]');
+  if(row&&row.parentNode&&!document.querySelector('[data-nd]'))row.parentNode.insertAdjacentHTML('afterend','<div class="row"><span class="note" style="align-self:center;margin-right:6px">Partidos por día:</span><button class="chip" data-nd="2">2</button><button class="chip" data-nd="3">3</button><button class="chip" data-nd="4">4</button><button class="chip" data-nd="5">5 (máximo)</button></div>');
+  document.querySelectorAll('[data-nd]').forEach(b=>b.addEventListener('click',()=>{LCFG.nd=+b.dataset.nd;try{saveL()}catch(e){};drawEsc()}));
+ }catch(e){}
+ const _de=drawEsc;
+ drawEsc=function(){try{document.querySelectorAll('[data-nd]').forEach(b=>b.classList.toggle('on',+b.dataset.nd===LCFG.nd))}catch(e){}return _de()};
+})();
+UPDLOG('27 nov 2026, reto escalera','Reto escalera: nuevo selector de partidos por día (2, 3, 4 o 5; máximo 5). Para meter el máximo de partidos en un día, el app ahora prueba separar los pasos 120, 90, 60 y 30 minutos y se queda con la cadena con más pasos; avisa cuando algunos pasos quedan muy juntos');
 try{applyAdj();VER++}catch(e){}
 try{applyAdj();VER++}catch(e){}
 
